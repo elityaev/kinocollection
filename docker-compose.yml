@@ -8,7 +8,7 @@ services:
     volumes:
       - ./app:/app
     env_file:
-      - env/.env
+      - .env
     command: sh -c "python manage.py makemigrations &&
                     python manage.py migrate &&
                     python manage.py runserver 0.0.0.0:8000"
@@ -18,7 +18,7 @@ services:
   database:
     image: postgres:14.6-alpine
     env_file:
-      - env/.env
+      - .env
 
   redis:
     image: redis:7.0.5-alpine
@@ -34,7 +34,7 @@ services:
     volumes:
       - ./app:/app
     env_file:
-      - env/.env
+      - .env
     links:
       - redis
     depends_on:
@@ -51,26 +51,9 @@ services:
     volumes:
       - ./app:/app
     env_file:
-      - env/.env
+      - .env
     links:
       - redis
     depends_on:
       - redis
       - web-app
-
-#  flower:
-#    build:
-#      context: .
-#    hostname: flower
-#    entrypoint: celery
-#    command: -A celery_app.app flower
-#    volumes:
-#      - ./app:/app
-#    links:
-#      - redis
-#    depends_on:
-#      - redis
-#    ports:
-#      - "5555:5555"
-
-

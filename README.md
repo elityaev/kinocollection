@@ -28,7 +28,7 @@ ADDITIONAL_REQUEST_PARAM = {
 
 Клонировать репозиторий.
 ```shell
-git clone
+git clone git@github.com:elityaev/kinocollection.git
 ```
 
 В корне проекта создать файл `.env` заполнить его по следующему шаблону:
