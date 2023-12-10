@@ -3,6 +3,7 @@ services:
     build:
       context: .
     container_name: app
+    restart: always
     ports:
       - "8000:8000"
     volumes:
@@ -28,6 +29,7 @@ services:
     build:
       context: .
     hostname: celery
+    restart: always
     container_name: worker
     entrypoint: celery
     command: -A celery_app.app worker --loglevel=info
