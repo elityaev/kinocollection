@@ -1,0 +1,76 @@
+services:
+  web-app:
+    build:
+      context: .
+    container_name: app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    env_file:
+      - env/.env
+    command: sh -c "python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - database
+
+  database:
+    image: postgres:14.6-alpine
+    env_file:
+      - env/.env
+
+  redis:
+    image: redis:7.0.5-alpine
+    hostname: redis
+
+  worker:
+    build:
+      context: .
+    hostname: celery
+    container_name: worker
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./app:/app
+    env_file:
+      - env/.env
+    links:
+      - redis
+    depends_on:
+      - redis
+
+  celery-beat:
+    build:
+      context: .
+    hostname: celery
+    restart: always
+    container_name: beat
+    entrypoint: celery
+    command: -A celery_app.app beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./app:/app
+    env_file:
+      - env/.env
+    links:
+      - redis
+    depends_on:
+      - redis
+      - web-app
+
+#  flower:
+#    build:
+#      context: .
+#    hostname: flower
+#    entrypoint: celery
+#    command: -A celery_app.app flower
+#    volumes:
+#      - ./app:/app
+#    links:
+#      - redis
+#    depends_on:
+#      - redis
+#    ports:
+#      - "5555:5555"
+
+

@@ -1,0 +1,15 @@
+{% extends 'templates/base.html' %}
+
+{% block content %}
+
+
+  <div class="query">
+    <form  class="query" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Найти</button>
+    </form>
+  </div>
+
+
+{% endblock %}

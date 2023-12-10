@@ -1,0 +1,12 @@
+{% extends 'templates/base.html' %}
+{% block content %}
+
+  <h4>Регистрация</h4>
+  <form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+
+{% endblock %}
+

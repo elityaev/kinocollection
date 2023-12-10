@@ -1,0 +1,41 @@
+{% extends 'templates/base.html' %}
+{% load static %}
+{% block content %}
+  {% if tiles %}
+    <h2>Коллекция</h2>
+    <div class="content">
+      {% for tile in tiles %}
+        <div class="tile">
+           <h3>{{ tile.name }}</h3>
+        {% if tile.is_saved %}
+          <img  src="{% static tile.poster_db_url %}" alt=""><br>
+        {% else %}
+          <img  src="{{ tile.poster_url }}" alt=""><br>
+        {% endif %}
+        <p>Год выпуска: {{ tile.year }}</p><br>
+        <p>Рейтинг кинопоиска: {{ tile.rating.kp }}</p><br>
+        <p>Рейтинг IMDB: {{ tile.rating.imdb }}</p><br>
+        <p>
+          Жанр:
+          {% for genre in tile.genres %}
+            {{ genre }},
+          {% endfor %}
+        </p><br>
+        <p>
+        Страна:
+          {% for country in tile.countries %}
+            {{ country }}, <br>
+          {% endfor %}
+        </p><br>
+
+        <p>{{ tile.description|truncatewords:20 }}</p>
+        <form action="{% url "selections:tile_remove" tile.id %}"
+              method="post">
+          <button class="button" type="submit">Удалить</button>
+          {% csrf_token %}
+        </form>
+        </div>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
