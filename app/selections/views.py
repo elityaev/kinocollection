@@ -27,7 +27,7 @@ class RandomTileView(View):
 
 class QueryView(View):
     def get(self, request, query_id):
-        tiles = Tile.objects.filter(query__id=query_id )
+        tiles = Tile.objects.filter(query__id=query_id)
         return render(request, 'selections/query_tiles.html', {'tiles': tiles})
 
     def post(self, request, query_id):
@@ -44,11 +44,9 @@ def collection(request, user_id):
     return render(request, 'selections/collection.html', {'tiles': tiles})
 
 
-
 @require_POST
 def tile_remove(request, tile_id):
     collection = Collection.objects.get(user=request.user)
     tile = Tile.objects.get(id=tile_id)
     collection.tiles.remove(tile)
     return redirect('selections:collection', request.user.id)
-

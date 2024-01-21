@@ -38,7 +38,6 @@ async def get_tile(genre: str):
 
 
 async def request_random_tile(genre: str, count: int):
-
     tiles = set(await asyncio.gather(
         *(get_tile(genre) for count in range(count)),
         return_exceptions=True
