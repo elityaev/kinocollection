@@ -23,11 +23,7 @@ class Collection(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tiles = models.ManyToManyField(Tile)
 
-    # def __str__(self) -> str:
-    #     return f'Коллекция - {self.user.username}'
-
 
 class Query(models.Model):
     tiles = models.ManyToManyField(Tile, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-

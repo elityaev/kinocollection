@@ -5,7 +5,6 @@ import environ
 
 env = environ.Env()
 
-# environ.Env.read_env(env_file=Path('./env/.env'))
 environ.Env.read_env(env_file=Path('.env'))
 
 

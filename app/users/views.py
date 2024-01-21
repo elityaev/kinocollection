@@ -1,25 +1,26 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LogoutView
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views.generic import CreateView
+
+from users.forms import CreationForm
 
 
-def register(request):
-    if request.method == 'GET':
-        return render(request, 'users/signup.html', {'form': UserCreationForm})
+class SignUp(CreateView):
+    form_class = CreationForm
+    success_url = reverse_lazy('selections:random_tile')
+    template_name = 'users/signup.html'
 
-    if request.method == 'POST':
-        query_id = request.get_full_path().split('/')[-2]
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            new_user = authenticate(username=form.cleaned_data['username'],
-                                    password=form.cleaned_data['password1'],
-                                    )
-            login(request, new_user)
-            if request.path != request.get_full_path():
-                return redirect('selections:query', query_id)
-            return redirect('selections:random_tile')
+    def form_valid(self, form):
+        """
+        Если форма валидна, сохраняет связанную модель.
+        Осуществляет логирование пользователя после его создания.
+        Возвращает пользователя на страницу с результатом запроса,
+        если с нее пользователь перешел на страницу регистрации.
+        """
+        self.object = form.save()
+        login(self.request, self.object)
+        if self.request.path != self.request.get_full_path().split('=')[-1]:
+            query_id = self.request.get_full_path().split('/')[-2]
+            return redirect('selections:query', query_id)
+        return redirect(self.get_success_url())

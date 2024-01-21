@@ -2,10 +2,11 @@
 {% block content %}
 
   <h4>Регистрация</h4>
-  <form method="post">
+  {{ request.get_full_path }}
+  <form method="post" action="{% url 'users:signup' %}?next={{request.get_full_path }}">
     {% csrf_token %}
-    {{ form }}
-    <button type="submit">Зарегистрироваться</button>
+    {{ form.as_p }}
+    <input type="submit" value="Зарегистрироваться">
   </form>
 
 {% endblock %}

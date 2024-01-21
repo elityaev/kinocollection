@@ -36,13 +36,18 @@
       </div>
     {% endif %}
     {% if user.is_authenticated %}
-      <button class="button" type="submit">Сохранить</button>
+      <input class="button" type="submit" value="Сохранить">
     {% endif %}
+
+  </form>
+  <form action="{% url 'selections:random_tile' %}">
+        <input class="button" type="submit" value="Искать еще" />
   </form>
   {% if not user.is_authenticated %}
+  <div class="content">
     <p>Для добавления фильма в коллекцию Вам необходимо войти или зарегистрироваться</p>
-    {{ request.path }}
-    <a href="{% url 'signup' %}?next={{ request.path }}">Регистрация</a>
-    <a href="{% url 'login' %}?next={{ request.path }}">Вход</a>
+  </div>
+    <a class="button" href="{% url 'users:signup' %}?next={{ request.get_full_path|urlencode }}">Регистрация</a>
+    <a class="button" href="{% url 'users:login' %}?next={{ request.path }}">Вход</a>
   {% endif %}
 {% endblock %}

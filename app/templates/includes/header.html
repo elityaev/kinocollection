@@ -8,10 +8,10 @@
 
     {% if user.is_authenticated %}
       <a class="link" href="{% url 'selections:collection' user.id %}">Коллекция</a>
-      <a class="link" href="{% url 'logout' %}">Выйти</a>
+      <a class="link" href="{% url 'users:logout' %}">Выйти</a>
     {% else %}
-      <a class="link" href="{% url 'login' %}">Вход</a>
-      <a class="link" href="{% url 'signup' %}">Регистрация</a>
+      <a class="link" href="{% url 'users:login' %}">Вход</a>
+      <a class="link" href="{% url 'users:signup' %}">Регистрация</a>
     {% endif %}
   </div>
 </header>
